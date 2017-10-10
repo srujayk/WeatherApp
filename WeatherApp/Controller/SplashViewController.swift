@@ -34,8 +34,8 @@ class SplashViewController: UIViewController {
                 
                 self.current_desc = json2["currently"]["summary"].stringValue
                 self.minutely_desc = json2["minutely"]["summary"].stringValue
-                self.precip = json2["minutely"]["data"]["precipProbability"].int
-                self.rain_time = json2["minutely"]["data"]["time"].int
+                self.precip = json2["minutely"]["data"][0]["precipProbability"].int
+                self.rain_time = json2["minutely"]["data"][0]["time"].int
                 
                 print(self.current_desc)
                 print(self.minutely_desc)
