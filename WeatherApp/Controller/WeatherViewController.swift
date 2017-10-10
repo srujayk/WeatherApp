@@ -50,6 +50,10 @@ class WeatherViewController: UIViewController {
     
     func updateText() {
         // change all the labels
+        temperatureLabel.text = weather.temperature
+        rainLabel.text = weather.rainData
+        weatherDescription.text = weather.weatherDescription
+        
     }
     
     // Weather notification received
