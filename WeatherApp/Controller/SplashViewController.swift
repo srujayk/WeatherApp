@@ -32,6 +32,13 @@ class SplashViewController: UIViewController {
         //latitude = locationManager.location!.coordinate.latitude
         //longitude = locationManager.location!.coordinate.longitude
         
+        if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+            currentLocation = locationManager.location
+            print(currentLocation.coordinate.latitude)
+            print(currentLocation.coordinate.longitude)
+        }
+        
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in
 //            print("Request: \(String(describing: response.request))")   // original url request
 //            print("Response: \(String(describing: response.response))") // http url response
@@ -64,10 +71,10 @@ class SplashViewController: UIViewController {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
         
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.startUpdatingLocation()
-            //locationManager.startUpdatingHeading()
-        }
+//        if CLLocationManager.locationServicesEnabled() {
+//            locationManager.startUpdatingLocation()
+//            //locationManager.startUpdatingHeading()
+//        }
     }
 
 }
