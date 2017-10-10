@@ -20,21 +20,25 @@ class SplashViewController: UIViewController {
     var minutely_desc: String!
     var precip: Int!
     var rain_time: Int!
-    var locationManager: CLLocationManager!
+    var locManager = CLLocationManager()
     var latitude: Double!
     var longitude: Double!
     var currentLocation: CLLocation!
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        determineMyCurrentLocation()
-//        latitude = locationManager.location?.coordinate.latitude
-//        longitude = locationManager.location?.coordinate.longitude
+        // needs to segue after like a second
+//        determineMyCurrentLocation()
+        //latitude = locationManager.location!.coordinate.latitude
+        //longitude = locationManager.location!.coordinate.longitude
+        
+        locManager.requestWhenInUseAuthorization()
         
         if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
-            currentLocation = locationManager.location
+            currentLocation = locManager.location
             latitude = currentLocation.coordinate.latitude
             longitude = currentLocation.coordinate.longitude
         }
@@ -65,37 +69,37 @@ class SplashViewController: UIViewController {
         }
     }
     
-    func determineMyCurrentLocation() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
-        
-//        if CLLocationManager.locationServicesEnabled() {
-//            locationManager.startUpdatingLocation()
-//            //locationManager.startUpdatingHeading()
-//        }
-    }
+//    func determineMyCurrentLocation() {
+//        locationManager = CLLocationManager()
+//        locationManager.delegate = self
+//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        locationManager.requestAlwaysAuthorization()
+//        
+////        if CLLocationManager.locationServicesEnabled() {
+////            locationManager.startUpdatingLocation()
+////            //locationManager.startUpdatingHeading()
+////        }
+//    }
 
 }
 
-extension SplashViewController: CLLocationManagerDelegate {
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let userLocation:CLLocation = locations[0] as CLLocation
-        
-        // Call stopUpdatingLocation() to stop listening for location updates,
-        // other wise this function will be called every time when user location changes.
-        
-        // manager.stopUpdatingLocation()
-        
-        self.latitude = userLocation.coordinate.latitude
-        self.longitude = userLocation.coordinate.longitude
-        print("user latitude = \(userLocation.coordinate.latitude)")
-        print("user longitude = \(userLocation.coordinate.longitude)")
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Error \(error)")
-    }
-}
+//extension SplashViewController: CLLocationManagerDelegate {
+//    
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        let userLocation:CLLocation = locations[0] as CLLocation
+//        
+//        // Call stopUpdatingLocation() to stop listening for location updates,
+//        // other wise this function will be called every time when user location changes.
+//        
+//        // manager.stopUpdatingLocation()
+//        
+//        self.latitude = userLocation.coordinate.latitude
+//        self.longitude = userLocation.coordinate.longitude
+//        print("user latitude = \(userLocation.coordinate.latitude)")
+//        print("user longitude = \(userLocation.coordinate.longitude)")
+//    }
+//    
+//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+//        print("Error \(error)")
+//    }
+//}
