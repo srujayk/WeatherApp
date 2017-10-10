@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import CoreLocation
 
 let notificationKey = "weather"
 
@@ -19,13 +20,19 @@ class SplashViewController: UIViewController {
     var minutely_desc: String!
     var precip: Int!
     var rain_time: Int!
+    var locationManager: CLLocationManager!
+    var latitude: Double!
+    var longitude: Double!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // needs to segue after like a second
+        determineMyCurrentLocation()
+        latitude = locationManager.location!.coordinate.latitude
+        longitude = locationManager.location!.coordinate.longitude
         
-        var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/37.8267,-122.4233").responseJSON { response in
+        var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in
 //            print("Request: \(String(describing: response.request))")   // original url request
 //            print("Response: \(String(describing: response.response))") // http url response
 //            print("Result: \(response.result)")                         // response serialization result
@@ -46,7 +53,40 @@ class SplashViewController: UIViewController {
                 // Notification manager
                 let nc = NotificationCenter.default
                 nc.post(name: Notification.Name(rawValue: "weather"), object: self)
+                print("did you work")
             }
         }
+    }
+    
+    func determineMyCurrentLocation() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestAlwaysAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.startUpdatingLocation()
+            //locationManager.startUpdatingHeading()
+        }
+    }
+
+}
+
+extension SplashViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation:CLLocation = locations[0] as CLLocation
+        
+        // Call stopUpdatingLocation() to stop listening for location updates,
+        // other wise this function will be called every time when user location changes.
+        
+        // manager.stopUpdatingLocation()
+        
+        print("user latitude = \(userLocation.coordinate.latitude)")
+        print("user longitude = \(userLocation.coordinate.longitude)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error \(error)")
     }
 }
