@@ -27,23 +27,16 @@ class SplashViewController: UIViewController {
             print("Response: \(String(describing: response.response))") // http url response
             print("Result: \(response.result)")                         // response serialization result
             
-            if let json = response.result.value as? [String:Any] {
-                print("JSON: \(json)") // serialized json response
+            if let json = JSON(response.result.value) {
+                //print("JSON: \(json)") // serialized json response
                 
-                let main = json["currently"] as! [[String:String]] {
-                    current_desc = main[1]
-                }
+                current_desc = json["currently"]["summary"].stringValue
+                minutely_desc = json["minutely"]["summary"].stringValue
+                rain_time = json["minutely"]["data"]["time"]
                 
-                let main2 = json["minutely"] as? [[String:String]]{
-                    minutely_desc = main2["summary"]
-                    
-                    let main3 = main2["data"] as? [[String:String]]{
-                        rain_time = main3["time"]
-                        
-                    }
-                    
-                }
-                    
+                print(current_desc)
+                print(minutely_desc)
+                print(rain_time)
                 
             }
             
