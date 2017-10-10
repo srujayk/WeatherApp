@@ -39,19 +39,24 @@ class WeatherViewController: UIViewController {
         view.addSubview(temperatureLabel)
         
         rainLabel = UILabel(frame: CGRect(x: 10, y: 50, width: 50, height: 40))
-        rainLabel.text = "ITS FUCKING RAINING"
+        rainLabel.text = "it's raining !"
         rainLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(rainLabel)
         
         weatherDescription = UILabel(frame: CGRect(x: 10, y: 90, width: 50, height: 40))
-        weatherDescription.text = "Fuck the weather"
+        weatherDescription.text = "i love the sun"
         view.addSubview(weatherDescription)
+    }
+    
+    func updateText() {
+        // change all the labels
     }
     
     // Weather notification received
     func weatherInfoReceived(_ notification: Notification) {
         weather = notification.userInfo!["weather"] as! WeatherData
         print(weather.rainData)
+        updateText()
     }
 }
 

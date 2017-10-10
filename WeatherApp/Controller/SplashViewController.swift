@@ -16,11 +16,11 @@ let notificationKey = "weather"
 
 class SplashViewController: UIViewController {
     
-    var current_desc: String!
-    var minutely_desc: String!
-    var precip: Int!
-    var rain_time: Int!
-    var temp: Double!
+    var currentDesc: String!
+    var minutelyDesc: String!
+    var precip: String!
+    var rainTime: Int!
+    var temp: Int!
     var locManager: CLLocationManager!
     var latitude: Double!
     var longitude: Double!
@@ -54,25 +54,25 @@ extension SplashViewController: CLLocationManagerDelegate {
             if let json = response.result.value {
                 let json2 = JSON(json)
         
-                self.temp = json2["currently"]["temperature"].double
-                self.current_desc = json2["currently"]["summary"].stringValue
-                self.minutely_desc = json2["minutely"]["summary"].stringValue
+                self.temp = Int(json2["currently"]["temperature"].double!)
+                self.currentDesc = json2["currently"]["summary"].stringValue
+                self.minutelyDesc = json2["minutely"]["summary"].stringValue
                 self.precip = json2["minutely"]["data"][0]["precipType"].string
-                self.rain_time = json2["minutely"]["data"][0]["time"].int
+                self.rainTime = json2["minutely"]["data"][0]["time"].int
                 
                 if self.precip != "rain" {
-                    self.rain_time = 0
-                    self.minutely_desc = "It will not rain in the next hour."
+                    self.rainTime = 0
+                    self.minutelyDesc = "It will not rain in the next hour."
                 } else {
-                    self.minutely_desc = minutely_desc + " It will rain at " + String(rain_time)
+                    self.minutelyDesc = self.minutelyDesc + " It will rain at " + String(self.rainTime)
                 }
         
-                print(self.current_desc)
-                print(self.minutely_desc)
+                print(self.currentDesc)
+                print(self.minutelyDesc)
                 print(self.precip)
-                print(self.rain_time)
+                print(self.rainTime)
                 
-                let weather = WeatherData(temperature: self.temp, rainData: minutely_desc, weatherDescription: current_desc, rainTime: rainTime)
+                let weather = WeatherData(temperature: self.temp, rainData: self.minutelyDesc, weatherDescription: self.currentDesc)
                 // Notification manager
                 let nc = NotificationCenter.default
                 nc.post(name: Notification.Name(rawValue: "weather"), object: nil, userInfo: ["weather": weather])
