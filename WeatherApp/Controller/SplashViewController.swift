@@ -20,7 +20,7 @@ class SplashViewController: UIViewController {
     var minutely_desc: String!
     var precip: Int!
     var rain_time: Int!
-    var locManager = CLLocationManager()
+    var locManager: CLLocationManager!
     var latitude: Double!
     var longitude: Double!
     var currentLocation: CLLocation!
@@ -29,77 +29,50 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // needs to segue after like a second
-//        determineMyCurrentLocation()
-        //latitude = locationManager.location!.coordinate.latitude
-        //longitude = locationManager.location!.coordinate.longitude
-        
-        locManager.requestWhenInUseAuthorization()
-        
-        if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
-            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
-            currentLocation = locManager.location
-            latitude = currentLocation.coordinate.latitude
-            longitude = currentLocation.coordinate.longitude
+        locManager = CLLocationManager()
+        locManager.delegate = self
+        locManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        while (CLLocationManager.authorizationStatus() != .authorizedWhenInUse) {
+            locManager.requestWhenInUseAuthorization()
         }
+        locManager.startUpdatingLocation()
+    }
+}
+
+extension SplashViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation:CLLocation = locations[0] as CLLocation
         
-        var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in
-//            print("Request: \(String(describing: response.request))")   // original url request
-//            print("Response: \(String(describing: response.response))") // http url response
-//            print("Result: \(response.result)")                         // response serialization result
-            
+        self.latitude = userLocation.coordinate.latitude
+        self.longitude = userLocation.coordinate.longitude
+        
+        var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in                  // response serialization result
             if let json = response.result.value {
-                //print("JSON: \(json)") // serialized json response
                 let json2 = JSON(json)
-                
+        
                 self.current_desc = json2["currently"]["summary"].stringValue
                 self.minutely_desc = json2["minutely"]["summary"].stringValue
                 self.precip = json2["minutely"]["data"][0]["precipProbability"].int
                 self.rain_time = json2["minutely"]["data"][0]["time"].int
-                
+        
                 print(self.current_desc)
                 print(self.minutely_desc)
                 print(self.precip)
                 print(self.rain_time)
+                let weather = WeatherData(temperature: 10, rainData: "moo", weatherDescription: "whoo")
                 // Notification manager
                 let nc = NotificationCenter.default
-                nc.post(name: Notification.Name(rawValue: "weather"), object: self)
-                print("did you work")
+                nc.post(name: Notification.Name(rawValue: "weather"), object: nil, userInfo: ["weather": weather])
+                self.performSegue(withIdentifier: "toWeather", sender: self)
             }
         }
     }
     
-//    func determineMyCurrentLocation() {
-//        locationManager = CLLocationManager()
-//        locationManager.delegate = self
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//        locationManager.requestAlwaysAuthorization()
-//        
-////        if CLLocationManager.locationServicesEnabled() {
-////            locationManager.startUpdatingLocation()
-////            //locationManager.startUpdatingHeading()
-////        }
-//    }
-
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error \(error)")
+    }
 }
 
-//extension SplashViewController: CLLocationManagerDelegate {
-//    
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        let userLocation:CLLocation = locations[0] as CLLocation
-//        
-//        // Call stopUpdatingLocation() to stop listening for location updates,
-//        // other wise this function will be called every time when user location changes.
-//        
-//        // manager.stopUpdatingLocation()
-//        
-//        self.latitude = userLocation.coordinate.latitude
-//        self.longitude = userLocation.coordinate.longitude
-//        print("user latitude = \(userLocation.coordinate.latitude)")
-//        print("user longitude = \(userLocation.coordinate.longitude)")
-//    }
-//    
-//    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-//        print("Error \(error)")
-//    }
-//}

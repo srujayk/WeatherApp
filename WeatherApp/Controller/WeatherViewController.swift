@@ -12,6 +12,7 @@ class WeatherViewController: UIViewController {
     var temperatureLabel: UILabel!
     var rainLabel: UILabel!
     var weatherDescription: UILabel!
+    var weather: WeatherData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +50,8 @@ class WeatherViewController: UIViewController {
     
     // Weather notification received
     func weatherInfoReceived(_ notification: Notification) {
-        print(notification.object as! String)
-        print("data received")
+        weather = notification.userInfo!["weather"] as! WeatherData
+        print(weather.rainData)
     }
 }
 
