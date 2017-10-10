@@ -102,8 +102,6 @@
 		2D6698671F8C9225006B91A1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				2DF74ED81F8C8B2D00DF990A /* WeatherViewController.swift */,
-				2D9576641F8CA1AC00875F22 /* SplashViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -111,6 +109,8 @@
 		2D6698681F8C922E006B91A1 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				2DF74ED81F8C8B2D00DF990A /* WeatherViewController.swift */,
+				2D9576641F8CA1AC00875F22 /* SplashViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
