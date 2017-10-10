@@ -29,8 +29,8 @@ class SplashViewController: UIViewController {
 
         // needs to segue after like a second
         determineMyCurrentLocation()
-        //latitude = locationManager.location!.coordinate.latitude
-        //longitude = locationManager.location!.coordinate.longitude
+        latitude = locationManager.location!.coordinate.latitude
+        longitude = locationManager.location!.coordinate.longitude
         
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in
 //            print("Request: \(String(describing: response.request))")   // original url request
