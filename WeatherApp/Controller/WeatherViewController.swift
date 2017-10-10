@@ -33,20 +33,23 @@ class WeatherViewController: UIViewController {
     }
     
     func setupText() {
-        temperatureLabel = UILabel(frame: CGRect(x: 10, y: 10, width: 50, height: 40))
+        temperatureLabel = UILabel(frame: rRect(rx: 89, ry: 145,
+                                                rw: 197, rh: 133))
         temperatureLabel.text = "200"
         temperatureLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(temperatureLabel)
         
-        rainLabel = UILabel(frame: CGRect(x: 10, y: 50, width: 50, height: 40))
+        rainLabel = UILabel(frame: rRect(rx: 90, ry: 300,
+                                         rw: 300, rh: 50))
         rainLabel.text = "it's raining !"
         rainLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(rainLabel)
         
-        weatherDescription = UILabel(frame: CGRect(x: 10, y: 90, width: 50, height: 40))
+        weatherDescription = UILabel(frame: rRect(rx: 90, ry: 400,
+                                                  rw: 300, rh: 50))
         weatherDescription.text = "i love the sun"
         view.addSubview(weatherDescription)
-        weatherDescription.text = "moo"3
+        weatherDescription.text = "moo"
     }
     
     func updateText() {
