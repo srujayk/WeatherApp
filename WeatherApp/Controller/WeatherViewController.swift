@@ -17,8 +17,9 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNotificationCenter()
         setupText()
+        setupNotificationCenter()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,21 +36,23 @@ class WeatherViewController: UIViewController {
     func setupText() {
         temperatureLabel = UILabel(frame: rRect(rx: 89, ry: 145,
                                                 rw: 197, rh: 133))
-        temperatureLabel.text = "200"
+        temperatureLabel.text = ""
+        temperatureLabel.textAlignment = .center
         temperatureLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(temperatureLabel)
         
-        rainLabel = UILabel(frame: rRect(rx: 90, ry: 300,
-                                         rw: 300, rh: 50))
-        rainLabel.text = "it's raining !"
+        rainLabel = UILabel(frame: rRect(rx: 39, ry: 364,
+                                         rw: 298, rh: 27))
+        rainLabel.text = ""
+        rainLabel.textAlignment = .center
         rainLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(rainLabel)
         
-        weatherDescription = UILabel(frame: rRect(rx: 90, ry: 400,
-                                                  rw: 300, rh: 50))
-        weatherDescription.text = "i love the sun"
+        weatherDescription = UILabel(frame: rRect(rx: 50, ry: 315,
+                                                  rw: 275, rh: 27))
+        weatherDescription.text = ""
+        weatherDescription.textAlignment = .center
         view.addSubview(weatherDescription)
-        weatherDescription.text = "moo"
     }
     
     func updateText() {
@@ -65,6 +68,20 @@ class WeatherViewController: UIViewController {
         weather = notification.userInfo!["weather"] as! WeatherData
         print(weather.rainData)
         updateText()
+    }
+}
+
+extension UIViewController {
+    func rRect(rx: CGFloat, ry: CGFloat,
+               rw: CGFloat, rh: CGFloat) -> CGRect {
+        // magic numbers for iPhone 6/7 relative coords
+        let w: CGFloat = 375
+        let h: CGFloat = 667
+        let x: CGFloat = (rx / w) * view.frame.width
+        let y: CGFloat = (ry / h) * view.frame.height
+        let width: CGFloat = (rw / w) * view.frame.width
+        let height: CGFloat = (rh / h) * view.frame.height
+        return CGRect(x: x, y: y, width: width, height: height)
     }
 }
 

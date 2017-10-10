@@ -19,7 +19,7 @@ class SplashViewController: UIViewController {
     var currentDesc: String!
     var minutelyDesc: String!
     var precip: String!
-    var rainTime: Int!
+    var rainTime: Double!
     var temp: Int!
     var locManager: CLLocationManager!
     var latitude: Double!
@@ -50,21 +50,22 @@ extension SplashViewController: CLLocationManagerDelegate {
         self.latitude = userLocation.coordinate.latitude
         self.longitude = userLocation.coordinate.longitude
         
+        self.latitude = 25.7617
+        self.longitude = 80.1918
+        
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in                  // response serialization result
             if let json = response.result.value {
                 let json2 = JSON(json)
         
                 self.temp = Int(json2["currently"]["temperature"].double!)
                 self.currentDesc = json2["currently"]["summary"].stringValue
-                self.minutelyDesc = json2["minutely"]["summary"].stringValue
                 self.precip = json2["minutely"]["data"][0]["precipType"].string
-                self.rainTime = json2["minutely"]["data"][0]["time"].int
+                self.rainTime = json2["minutely"]["data"][0]["time"].double
                 
                 if self.precip != "rain" {
-                    self.rainTime = 0
                     self.minutelyDesc = "It will not rain in the next hour."
                 } else {
-                    self.minutelyDesc = self.minutelyDesc + " It will rain at " + String(self.rainTime)
+                    self.minutelyDesc = "It will rain at " + String(describing: NSDate(timeIntervalSince1970: self.rainTime))
                 }
         
                 print(self.currentDesc)
