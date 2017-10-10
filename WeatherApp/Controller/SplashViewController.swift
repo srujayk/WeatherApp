@@ -36,7 +36,7 @@ class SplashViewController: UIViewController {
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Authorized){
             
-            currentLocation = locManager.location
+            currentLocation = locationManager.location
             
         }
         longitude = currentLocation.coordinate.longitude
