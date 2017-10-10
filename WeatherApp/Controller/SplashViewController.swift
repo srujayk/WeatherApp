@@ -23,7 +23,6 @@ class SplashViewController: UIViewController {
     var locationManager: CLLocationManager!
     var latitude: Double!
     var longitude: Double!
-    var currentLocation = CLLocation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,15 +31,6 @@ class SplashViewController: UIViewController {
         determineMyCurrentLocation()
         //latitude = locationManager.location!.coordinate.latitude
         //longitude = locationManager.location!.coordinate.longitude
-        
-        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse ||
-            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Authorized){
-            
-            currentLocation = locManager.location
-            
-        }
-        longitude = currentLocation.coordinate.longitude
-        latitude = currentLocation.coordinate.latitude
         
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in
 //            print("Request: \(String(describing: response.request))")   // original url request
