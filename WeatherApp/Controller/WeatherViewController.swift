@@ -28,7 +28,7 @@ class WeatherViewController: UIViewController {
     // Setup Functions
     func setupNotificationCenter() {
         let nc: NotificationCenter = NotificationCenter.default
-        // nc.addObserver(self, selector: #selector(weatherInfoReceived(x)), name: NSNotification.Name(rawValue: "meow"), object: x)
+        nc.addObserver(self, selector: #selector(weatherInfoReceived(_ :)), name: NSNotification.Name(rawValue: "weather"), object: nil)
     }
     
     func setupText() {

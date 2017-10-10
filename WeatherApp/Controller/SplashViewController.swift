@@ -10,6 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
+let notificationKey = "weather"
+
 
 class SplashViewController: UIViewController {
     
@@ -41,20 +43,10 @@ class SplashViewController: UIViewController {
                 print(self.minutely_desc)
                 print(self.precip)
                 print(self.rain_time)
+                // Notification manager
+                let nc = NotificationCenter.default
+                nc.post(name: Notification.Name(rawValue: "weather"), object: self)
             }
         }
-        
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
