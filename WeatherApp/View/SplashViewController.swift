@@ -10,6 +10,10 @@ import UIKit
 import Alamofire
 
 class SplashViewController: UIViewController {
+    
+    var current_desc: String!
+    var minutely_desc: String!
+    var rain_time: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +25,24 @@ class SplashViewController: UIViewController {
             print("Response: \(String(describing: response.response))") // http url response
             print("Result: \(response.result)")                         // response serialization result
             
-            if let json = response.result.value {
+            if let json = response.result.value as? [String:Any] {
                 print("JSON: \(json)") // serialized json response
+                
+                let main = json["currently"] as? [[String:String]]{
+                    current_desc = main[1]
+                }
+                
+                let main2 = json["minutely"] as? [[String:String]]{
+                    minutely_desc = main2["summary"]
+                    
+                    let main3 = main2["data"] as? [[String:String]]{
+                        rain_time = main3["time"]
+                        
+                    }
+                    
+                }
+                    
+                
             }
             
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
