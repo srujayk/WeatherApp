@@ -8,6 +8,8 @@
 
 import UIKit
 import Alamofire
+import SwiftyJSON
+
 
 class SplashViewController: UIViewController {
     
@@ -28,7 +30,7 @@ class SplashViewController: UIViewController {
             if let json = response.result.value as? [String:Any] {
                 print("JSON: \(json)") // serialized json response
                 
-                let main = json["currently"] as? [[String:String]]{
+                let main = json["currently"] as! [[String:String]] {
                     current_desc = main[1]
                 }
                 
