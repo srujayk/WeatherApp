@@ -46,11 +46,12 @@ class WeatherViewController: UIViewController {
         weatherDescription = UILabel(frame: CGRect(x: 10, y: 90, width: 50, height: 40))
         weatherDescription.text = "i love the sun"
         view.addSubview(weatherDescription)
+        weatherDescription.text = "moo"3
     }
     
     func updateText() {
         // change all the labels
-        temperatureLabel.text = weather.temperature
+        temperatureLabel.text = String(weather.temperature)
         rainLabel.text = weather.rainData
         weatherDescription.text = weather.weatherDescription
         
