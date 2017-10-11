@@ -6,6 +6,7 @@
 //  Copyright © 2017 Stephen Jayakar. All rights reserved.
 //
 
+
 import UIKit
 
 class WeatherViewController: UIViewController {
@@ -17,9 +18,9 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupBackground()
         setupText()
         setupNotificationCenter()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,17 +29,22 @@ class WeatherViewController: UIViewController {
     }
 
     // Setup Functions
+    func setupBackground() {
+        view.backgroundColor = UIColor(red:0.23, green:0.23, blue:0.23, alpha:1.0) // #3a3a3a
+    }
     func setupNotificationCenter() {
         let nc: NotificationCenter = NotificationCenter.default
         nc.addObserver(self, selector: #selector(weatherInfoReceived(_ :)), name: NSNotification.Name(rawValue: "weather"), object: nil)
     }
     
     func setupText() {
-        temperatureLabel = UILabel(frame: rRect(rx: 89, ry: 145,
-                                                rw: 197, rh: 133))
+        temperatureLabel = UILabel(frame: rRect(rx: 59, ry: 127,
+                                                rw: 258, rh: 186))
         temperatureLabel.text = ""
         temperatureLabel.textAlignment = .center
         temperatureLabel.adjustsFontSizeToFitWidth = true
+        temperatureLabel.textColor = UIColor.white
+        temperatureLabel.font = UIFont(name: "Helvetica", size: 140)
         view.addSubview(temperatureLabel)
         
         rainLabel = UILabel(frame: rRect(rx: 39, ry: 364,
@@ -46,12 +52,14 @@ class WeatherViewController: UIViewController {
         rainLabel.text = ""
         rainLabel.textAlignment = .center
         rainLabel.adjustsFontSizeToFitWidth = true
+        rainLabel.textColor = UIColor.white
         view.addSubview(rainLabel)
         
         weatherDescription = UILabel(frame: rRect(rx: 50, ry: 315,
                                                   rw: 275, rh: 27))
         weatherDescription.text = ""
         weatherDescription.textAlignment = .center
+        weatherDescription.textColor = UIColor.white
         view.addSubview(weatherDescription)
     }
     

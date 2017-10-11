@@ -6,13 +6,13 @@
 //  Copyright © 2017 Stephen Jayakar. All rights reserved.
 //
 
+
 import UIKit
 import Alamofire
 import SwiftyJSON
 import CoreLocation
 
 let notificationKey = "weather"
-
 
 class SplashViewController: UIViewController {
     
@@ -25,14 +25,23 @@ class SplashViewController: UIViewController {
     var latitude: Double!
     var longitude: Double!
     var currentLocation: CLLocation!
+    var poweredBy: UILabel!
+    var logo: UIImageView!
+    var timerFinished = true
+    var notificationFinished = false
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        setupText()
+        setupBackground()
+        setupLogo()
+        
+//        var timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,6 +49,38 @@ class SplashViewController: UIViewController {
             locManager.requestWhenInUseAuthorization()
         }
         locManager.startUpdatingLocation()
+    }
+    
+    // Setup Functions
+    func setupText() {
+        poweredBy = UILabel(frame: rRect(rx: 13, ry: 31, rw: 185, rh: 27))
+        poweredBy.text = "Powered by Dark Sky"
+        poweredBy.textColor = UIColor.white
+        poweredBy.adjustsFontSizeToFitWidth = true
+        view.addSubview(poweredBy)
+    }
+    
+    func setupBackground() {
+        view.backgroundColor = UIColor(red:0.23, green:0.23, blue:0.23, alpha:1.0) // #3a3a3a
+    }
+    
+    func setupLogo() {
+        logo = UIImageView(frame: rRect(rx: 13, ry: 87, rw: 350, rh: 350))
+        logo.image = UIImage(named: "Logo")
+        view.addSubview(logo)
+    }
+    
+    func canWeSegue() {
+        if (self.timerFinished && self.notificationFinished) {
+            self.performSegue(withIdentifier: "toWeather", sender: self)
+        }
+    }
+    
+    // Selectors
+    @objc
+    func timerDone() {
+        timerFinished = true
+        self.canWeSegue()
     }
 }
 
@@ -49,9 +90,6 @@ extension SplashViewController: CLLocationManagerDelegate {
         
         self.latitude = userLocation.coordinate.latitude
         self.longitude = userLocation.coordinate.longitude
-        
-        self.latitude = 25.7617
-        self.longitude = 80.1918
         
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in                  // response serialization result
             if let json = response.result.value {
@@ -65,19 +103,15 @@ extension SplashViewController: CLLocationManagerDelegate {
                 if self.precip != "rain" {
                     self.minutelyDesc = "It will not rain in the next hour."
                 } else {
-                    self.minutelyDesc = "It will rain at " + String(describing: NSDate(timeIntervalSince1970: self.rainTime))
+                    self.minutelyDesc = "It will rain at " + String(describing: NSDate(timeIntervalSince1970: self.rainTime)) + "!"
                 }
-        
-                print(self.currentDesc)
-                print(self.minutelyDesc)
-                print(self.precip)
-                print(self.rainTime)
                 
                 let weather = WeatherData(temperature: self.temp, rainData: self.minutelyDesc, weatherDescription: self.currentDesc)
                 // Notification manager
                 let nc = NotificationCenter.default
                 nc.post(name: Notification.Name(rawValue: "weather"), object: nil, userInfo: ["weather": weather])
-                self.performSegue(withIdentifier: "toWeather", sender: self)
+                self.notificationFinished = true
+                self.canWeSegue()
             }
         }
     }
