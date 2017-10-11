@@ -12,6 +12,7 @@ import Alamofire
 import SwiftyJSON
 import CoreLocation
 
+// Global / only notification key
 let notificationKey = "weather"
 
 class SplashViewController: UIViewController {

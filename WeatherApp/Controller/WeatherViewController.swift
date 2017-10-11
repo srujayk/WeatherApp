@@ -34,12 +34,7 @@ class WeatherViewController: UIViewController {
         setupText()
         setupNotificationCenter()
         setupIcon()
-        self.updateText()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        updateText()
     }
 
     // Setup Functions
@@ -90,11 +85,11 @@ class WeatherViewController: UIViewController {
     }
     
     func updateText() {
-        // change all the labels
+        // Change all the labels
         temperatureLabel.text = String(weather.temperature)
         rainLabel.text = weather.rainData
         weatherDescription.text = weather.weatherDescription
-        // update image
+        // Update the image
         let image = UIImage(named: iconMap[weather.iconName]!)
         icon.image = image
     }
