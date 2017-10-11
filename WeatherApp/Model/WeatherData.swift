@@ -12,10 +12,12 @@ struct WeatherData {
     // If it's empty, no rain; otherwise, it will be in minutes until it rains
     var rainData: String!
     var weatherDescription: String!
+    var iconName: String!
     
-    init(temperature: Int, rainData: String, weatherDescription: String) {
+    init(temperature: Int, rainData: String, weatherDescription: String, iconName: String) {
         self.temperature = temperature
         self.rainData = rainData
         self.weatherDescription = weatherDescription
+        self.iconName = iconName
     }
 }

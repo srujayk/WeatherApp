@@ -27,7 +27,6 @@ class SplashViewController: UIViewController {
     var currentLocation: CLLocation!
     var poweredBy: UILabel!
     var logo: UIImageView!
-    var timerFinished = true
     var notificationFinished = false
 
 
@@ -40,8 +39,7 @@ class SplashViewController: UIViewController {
         setupText()
         setupBackground()
         setupLogo()
-        
-//        var timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,16 +69,9 @@ class SplashViewController: UIViewController {
     }
     
     func canWeSegue() {
-        if (self.timerFinished && self.notificationFinished) {
+        if (self.notificationFinished) {
             self.performSegue(withIdentifier: "toWeather", sender: self)
         }
-    }
-    
-    // Selectors
-    @objc
-    func timerDone() {
-        timerFinished = true
-        self.canWeSegue()
     }
 }
 
@@ -91,12 +82,16 @@ extension SplashViewController: CLLocationManagerDelegate {
         self.latitude = userLocation.coordinate.latitude
         self.longitude = userLocation.coordinate.longitude
         
+        self.latitude = 22.68
+        self.longitude = 79.5
+        
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in                  // response serialization result
             if let json = response.result.value {
                 let json2 = JSON(json)
         
                 self.temp = Int(json2["currently"]["temperature"].double!)
                 self.currentDesc = json2["currently"]["summary"].stringValue
+                let iconName = json2["currently"]["icon"].stringValue
                 self.precip = json2["minutely"]["data"][0]["precipType"].string
                 self.rainTime = json2["minutely"]["data"][0]["time"].double
                 
@@ -106,11 +101,12 @@ extension SplashViewController: CLLocationManagerDelegate {
                     self.minutelyDesc = "It will rain at " + String(describing: NSDate(timeIntervalSince1970: self.rainTime)) + "!"
                 }
                 
-                let weather = WeatherData(temperature: self.temp, rainData: self.minutelyDesc, weatherDescription: self.currentDesc)
+                let weather = WeatherData(temperature: self.temp, rainData: self.minutelyDesc, weatherDescription: self.currentDesc, iconName: iconName)
                 // Notification manager
                 let nc = NotificationCenter.default
                 nc.post(name: Notification.Name(rawValue: "weather"), object: nil, userInfo: ["weather": weather])
                 self.notificationFinished = true
+                self.locManager.stopUpdatingLocation()
                 self.canWeSegue()
             }
         }

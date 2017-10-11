@@ -13,7 +13,18 @@ class WeatherViewController: UIViewController {
     var temperatureLabel: UILabel!
     var rainLabel: UILabel!
     var weatherDescription: UILabel!
-    var weather: WeatherData!
+    var weather = WeatherData(temperature: 0, rainData: "It will not rain in the next hour.", weatherDescription: "Partly Cloudy", iconName: "partly-cloudy-day")
+    var icon: UIImageView!
+    var iconMap = ["clear-day": "clear-day",
+                   "clear-night": "clear-night",
+                   "rain": "rain",
+                   "snow": "snow",
+                   "sleet": "snow",
+                   "wind": "wind",
+                   "fog": "partly-cloudy-day",
+                   "cloudy": "partly-cloudy-day",
+                   "partly-cloudy-day": "partly-cloudy-day",
+                   "partly-cloudy-night": "partly-cloudy-night"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +32,8 @@ class WeatherViewController: UIViewController {
         setupBackground()
         setupText()
         setupNotificationCenter()
+        setupIcon()
+        self.updateText()
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,7 +53,7 @@ class WeatherViewController: UIViewController {
     func setupText() {
         temperatureLabel = UILabel(frame: rRect(rx: 59, ry: 127,
                                                 rw: 258, rh: 186))
-        temperatureLabel.text = ""
+        temperatureLabel.text = "0"
         temperatureLabel.textAlignment = .center
         temperatureLabel.adjustsFontSizeToFitWidth = true
         temperatureLabel.textColor = UIColor.white
@@ -49,7 +62,7 @@ class WeatherViewController: UIViewController {
         
         rainLabel = UILabel(frame: rRect(rx: 39, ry: 364,
                                          rw: 298, rh: 27))
-        rainLabel.text = ""
+        rainLabel.text = "It will not rain in the next hour."
         rainLabel.textAlignment = .center
         rainLabel.adjustsFontSizeToFitWidth = true
         rainLabel.textColor = UIColor.white
@@ -57,10 +70,17 @@ class WeatherViewController: UIViewController {
         
         weatherDescription = UILabel(frame: rRect(rx: 50, ry: 315,
                                                   rw: 275, rh: 27))
-        weatherDescription.text = ""
+        weatherDescription.text = "Partly Cloudy"
         weatherDescription.textAlignment = .center
         weatherDescription.textColor = UIColor.white
         view.addSubview(weatherDescription)
+    }
+    
+    func setupIcon() {
+        icon = UIImageView(frame: rRect(rx: 112, ry: 451, rw: 147, rh: 147))
+        icon.image = UIImage(named: "partly-cloudy")
+        icon.contentMode = .scaleAspectFit
+        view.addSubview(icon)
     }
     
     func updateText() {
@@ -68,13 +88,15 @@ class WeatherViewController: UIViewController {
         temperatureLabel.text = String(weather.temperature)
         rainLabel.text = weather.rainData
         weatherDescription.text = weather.weatherDescription
-        
+        // update image
+        let image = UIImage(named: iconMap[weather.iconName]!)
+        icon.image = image
     }
     
     // Weather notification received
     func weatherInfoReceived(_ notification: Notification) {
-        weather = notification.userInfo!["weather"] as! WeatherData
-        print(weather.rainData)
+        print("Notification received!")
+        self.weather = notification.userInfo!["weather"] as! WeatherData
         updateText()
     }
 }
