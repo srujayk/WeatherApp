@@ -14,7 +14,8 @@ class WeatherViewController: UIViewController {
     var rainLabel: UILabel!
     var weatherDescription: UILabel!
     var weather = WeatherData(temperature: 0, rainData: "It will not rain in the next hour.", weatherDescription: "Partly Cloudy", iconName: "partly-cloudy-day")
-    var icon: UIImageView!
+    var icon: UIImageView!    
+    var poweredBy: UIButton!
     var iconMap = ["clear-day": "clear-day",
                    "clear-night": "clear-night",
                    "rain": "rain",
@@ -43,7 +44,7 @@ class WeatherViewController: UIViewController {
 
     // Setup Functions
     func setupBackground() {
-        view.backgroundColor = UIColor(red:0.23, green:0.23, blue:0.23, alpha:1.0) // #3a3a3a
+        view.backgroundColor = UIColor(red:0.92, green:0.29, blue:0.29, alpha:1.0) // #3a3a3a
     }
     func setupNotificationCenter() {
         let nc: NotificationCenter = NotificationCenter.default
@@ -74,6 +75,11 @@ class WeatherViewController: UIViewController {
         weatherDescription.textAlignment = .center
         weatherDescription.textColor = UIColor.white
         view.addSubview(weatherDescription)
+        
+        poweredBy = UIButton(frame: rRect(rx: 13, ry: 31, rw: 200, rh: 27))
+        poweredBy.setTitle("Powered by Darksky", for: .normal)
+        poweredBy.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        view.addSubview(poweredBy)
     }
     
     func setupIcon() {
@@ -98,6 +104,11 @@ class WeatherViewController: UIViewController {
         print("Notification received!")
         self.weather = notification.userInfo!["weather"] as! WeatherData
         updateText()
+    }
+    
+    // Selectors
+    func buttonPressed() {
+        UIApplication.shared.openURL(URL(string: "https://darksky.net/poweredby")!)
     }
 }
 

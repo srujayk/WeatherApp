@@ -25,7 +25,6 @@ class SplashViewController: UIViewController {
     var latitude: Double!
     var longitude: Double!
     var currentLocation: CLLocation!
-    var poweredBy: UILabel!
     var logo: UIImageView!
     var notificationFinished = false
 
@@ -36,7 +35,6 @@ class SplashViewController: UIViewController {
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyBest
         
-        setupText()
         setupBackground()
         setupLogo()
 
@@ -47,16 +45,7 @@ class SplashViewController: UIViewController {
             locManager.requestWhenInUseAuthorization()
         }
         locManager.startUpdatingLocation()
-    }
-    
-    // Setup Functions
-    func setupText() {
-        poweredBy = UILabel(frame: rRect(rx: 13, ry: 31, rw: 185, rh: 27))
-        poweredBy.text = "Powered by Dark Sky"
-        poweredBy.textColor = UIColor.white
-        poweredBy.adjustsFontSizeToFitWidth = true
-        view.addSubview(poweredBy)
-    }
+    }    
     
     func setupBackground() {
         view.backgroundColor = UIColor(red:0.23, green:0.23, blue:0.23, alpha:1.0) // #3a3a3a
@@ -81,9 +70,6 @@ extension SplashViewController: CLLocationManagerDelegate {
         
         self.latitude = userLocation.coordinate.latitude
         self.longitude = userLocation.coordinate.longitude
-        
-        self.latitude = 22.68
-        self.longitude = 79.5
         
         var weatherData = Alamofire.request("https://api.darksky.net/forecast/e992c804052acdd34db963b614a1b985/" + String(latitude) + "," + String(longitude)).responseJSON { response in                  // response serialization result
             if let json = response.result.value {
